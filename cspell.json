@@ -13,7 +13,9 @@
     "indexdb",
     "clearbrowser",
     "browserslist",
-    "terser"
+    "terser",
+    "lintstagedrc",
+    "esbenp"
   ],
   "ignorePaths": [
     "node_modules",
