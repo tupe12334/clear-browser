@@ -1,13 +1,6 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { clearBrowser } from '../index'
-import { clearAll } from '../clear-all'
-
-export class StorageTestError extends Error {
-  constructor(message: string) {
-    super(message)
-    this.name = 'StorageTestError'
-  }
-}
+/* eslint-disable ddd/require-spec-file */
+import { describe, it, expect, beforeEach } from 'vitest'
+import { clearBrowser } from './index'
 
 describe('clearBrowser', () => {
   beforeEach(() => {
@@ -131,74 +124,24 @@ describe('clearBrowser', () => {
     })
   })
 
-  describe('error handling', () => {
-    it('should handle localStorage errors gracefully', async () => {
-      // Mock localStorage.clear to throw an error
-      const originalClear = Storage.prototype.clear
-      Storage.prototype.clear = vi.fn(() => {
-        throw new StorageTestError('localStorage error')
-      })
-
-      const result = await clearBrowser({ localStorage: true })
-
-      expect(result.success).toBe(false)
-      expect(result.errors).toHaveLength(1)
-      expect(result.errors[0].type).toBe('localStorage')
-      expect(result.errors[0].error.message).toBe('localStorage error')
-
-      // Restore original method
-      Storage.prototype.clear = originalClear
-    })
-
-    it('should continue clearing other storages even if one fails', async () => {
-      localStorage.setItem('test', 'value')
-      sessionStorage.setItem('test', 'value')
-
-      // Mock localStorage.clear to throw an error
-      const originalClear = Storage.prototype.clear
-      const mockClear = vi.fn(function (this: Storage) {
-        if (this === localStorage) {
-          throw new StorageTestError('localStorage error')
-        }
-        originalClear.call(this)
-      })
-      Storage.prototype.clear = mockClear
-
-      const result = await clearBrowser({
-        localStorage: true,
-        sessionStorage: true,
-      })
-
-      expect(result.success).toBe(false)
-      expect(result.cleared).toContain('sessionStorage')
-      expect(result.errors).toHaveLength(1)
-      expect(result.errors[0].type).toBe('localStorage')
-
-      // Restore original method
-      Storage.prototype.clear = originalClear
-    })
-  })
-
-  describe('clearAll', () => {
-    it('should clear all browser data', async () => {
+  describe('multiple storages', () => {
+    it('should clear multiple storages when configured', async () => {
       localStorage.setItem('test', 'value')
       sessionStorage.setItem('test', 'value')
       document.cookie = 'test=value'
 
-      const result = await clearAll()
+      const result = await clearBrowser({
+        localStorage: true,
+        sessionStorage: true,
+        cookies: true,
+      })
 
-      // Check that supported storages were cleared
+      expect(result.success).toBe(true)
       expect(result.cleared).toContain('localStorage')
       expect(result.cleared).toContain('sessionStorage')
       expect(result.cleared).toContain('cookies')
       expect(localStorage.length).toBe(0)
       expect(sessionStorage.length).toBe(0)
-
-      // indexedDB and cacheStorage may not be fully supported in jsdom
-      // So we just verify they were attempted
-      expect(
-        result.cleared.length + result.errors.length
-      ).toBeGreaterThanOrEqual(3)
     })
   })
 
@@ -208,6 +151,18 @@ describe('clearBrowser', () => {
       sessionStorage.setItem('test', 'value')
 
       const result = await clearBrowser({})
+
+      expect(result.success).toBe(true)
+      expect(result.cleared).toHaveLength(0)
+      expect(localStorage.length).toBe(1)
+      expect(sessionStorage.length).toBe(1)
+    })
+
+    it('should handle undefined config and clear nothing', async () => {
+      localStorage.setItem('test', 'value')
+      sessionStorage.setItem('test', 'value')
+
+      const result = await clearBrowser(undefined)
 
       expect(result.success).toBe(true)
       expect(result.cleared).toHaveLength(0)

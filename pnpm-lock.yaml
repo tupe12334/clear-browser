@@ -21,8 +21,8 @@ importers:
         specifier: ^9.39.1
         version: 9.39.1(jiti@2.6.1)
       eslint-config-agent:
-        specifier: ^1.7.2
-        version: 1.7.2(5a0cb9714445e7e302fd423546f3de6b)
+        specifier: ^1.8.2
+        version: 1.8.2(5a0cb9714445e7e302fd423546f3de6b)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -1567,8 +1567,8 @@ packages:
     peerDependencies:
       eslint: '>=6.0.0'
 
-  eslint-config-agent@1.7.2:
-    resolution: {integrity: sha512-iQNhzz0b4wdC/EYZDPt8tD9yDT5MCAT3LwLpIGamNZCqbHtZskrYn7l0DIM5raHGH6GT/eaSdsU4IwyRtBGefA==}
+  eslint-config-agent@1.8.2:
+    resolution: {integrity: sha512-pKom64QluXQ3MPx+LzC3RBxxtm00FRP8erY1z9qM3M5gWm4e6u6qxrBtrOqSDveoMANLSIGotQOxC7FkoYuYPQ==}
     engines: {node: '>=18.0.0'}
     peerDependencies:
       '@eslint/eslintrc': ^3.3.1
@@ -4818,7 +4818,7 @@ snapshots:
       eslint: 9.39.1(jiti@2.6.1)
       semver: 7.7.3
 
-  eslint-config-agent@1.7.2(5a0cb9714445e7e302fd423546f3de6b):
+  eslint-config-agent@1.8.2(5a0cb9714445e7e302fd423546f3de6b):
     dependencies:
       '@eslint/eslintrc': 3.3.1
       '@eslint/js': 9.39.1

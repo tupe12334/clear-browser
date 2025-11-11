@@ -38,3 +38,7 @@ pnpm-debug.log*
 # Temporary files
 *.tmp
 .cache/
+
+# Claude Code temporary files
+.claude-container/
+eslint-report.json
